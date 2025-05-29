@@ -1,12 +1,32 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import FoodItemForm from '../food/FoodItemForm';
 import FoodItemsTable from '../food/FoodItemsTable';
 
+interface FoodItem {
+  id: string;
+  name: string;
+  description: string;
+  category: string;
+  userId: string;
+  userName: string;
+  userEmail: string;
+  createdAt: string;
+}
+
 const Dashboard: React.FC = () => {
   const { user, logout } = useAuth();
+  const [editingItem, setEditingItem] = useState<FoodItem | null>(null);
+
+  const handleEdit = (item: FoodItem) => {
+    setEditingItem(item);
+  };
+
+  const handleSave = () => {
+    setEditingItem(null);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900">
@@ -35,11 +55,11 @@ const Dashboard: React.FC = () => {
         {/* Main Content */}
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="space-y-8">
-            {/* Add Food Item Form */}
-            <FoodItemForm />
+            {/* Add/Edit Food Item Form */}
+            <FoodItemForm editItem={editingItem} onSave={handleSave} />
             
             {/* Food Items Table */}
-            <FoodItemsTable />
+            <FoodItemsTable onEdit={handleEdit} />
           </div>
         </main>
       </div>
