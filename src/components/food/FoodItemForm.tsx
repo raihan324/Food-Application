@@ -11,7 +11,6 @@ interface FoodItem {
   id: string;
   name: string;
   description: string;
-  category: string;
   userId: string;
   userName: string;
   userEmail: string;
@@ -26,7 +25,6 @@ interface FoodItemFormProps {
 const FoodItemForm: React.FC<FoodItemFormProps> = ({ editItem, onSave }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [category, setCategory] = useState('');
   const { user } = useAuth();
   const { toast } = useToast();
 
@@ -34,22 +32,20 @@ const FoodItemForm: React.FC<FoodItemFormProps> = ({ editItem, onSave }) => {
     if (editItem) {
       setName(editItem.name);
       setDescription(editItem.description);
-      setCategory(editItem.category);
     } else {
       // Reset form when not editing
       setName('');
       setDescription('');
-      setCategory('');
     }
   }, [editItem]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!name || !description || !category) {
+    if (!name) {
       toast({
         title: "Error",
-        description: "Please fill in all fields",
+        description: "Please fill in the name field",
         variant: "destructive"
       });
       return;
@@ -63,7 +59,7 @@ const FoodItemForm: React.FC<FoodItemFormProps> = ({ editItem, onSave }) => {
       // Update existing item
       const updatedItems = existingItems.map((item: FoodItem) => 
         item.id === editItem.id 
-          ? { ...item, name, description, category }
+          ? { ...item, name, description }
           : item
       );
       localStorage.setItem('foodItems', JSON.stringify(updatedItems));
@@ -78,7 +74,6 @@ const FoodItemForm: React.FC<FoodItemFormProps> = ({ editItem, onSave }) => {
         id: Date.now().toString(),
         name,
         description,
-        category,
         userId: user.id,
         userName: user.name,
         userEmail: user.email,
@@ -97,7 +92,6 @@ const FoodItemForm: React.FC<FoodItemFormProps> = ({ editItem, onSave }) => {
     // Reset form
     setName('');
     setDescription('');
-    setCategory('');
 
     // Dispatch custom event to update table
     window.dispatchEvent(new Event('foodItemAdded'));
@@ -114,34 +108,20 @@ const FoodItemForm: React.FC<FoodItemFormProps> = ({ editItem, onSave }) => {
       </h2>
       
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <Label htmlFor="name" className="text-white">Item Name</Label>
-            <Input
-              id="name"
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500"
-              placeholder="Enter food item name"
-            />
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="category" className="text-white">Category</Label>
-            <Input
-              id="category"
-              type="text"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500"
-              placeholder="e.g., Appetizer, Main Course"
-            />
-          </div>
+        <div className="space-y-2">
+          <Label htmlFor="name" className="text-white">Item Name</Label>
+          <Input
+            id="name"
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500"
+            placeholder="Enter food item name"
+          />
         </div>
         
         <div className="space-y-2">
-          <Label htmlFor="description" className="text-white">Description</Label>
+          <Label htmlFor="description" className="text-white">Description (Optional)</Label>
           <Textarea
             id="description"
             value={description}

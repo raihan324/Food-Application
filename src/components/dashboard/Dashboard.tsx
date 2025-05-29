@@ -9,7 +9,6 @@ interface FoodItem {
   id: string;
   name: string;
   description: string;
-  category: string;
   userId: string;
   userName: string;
   userEmail: string;
@@ -52,14 +51,18 @@ const Dashboard: React.FC = () => {
           </div>
         </header>
 
-        {/* Main Content */}
+        {/* Main Content - Side by side layout */}
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="space-y-8">
-            {/* Add/Edit Food Item Form */}
-            <FoodItemForm editItem={editingItem} onSave={handleSave} />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Left side - Form */}
+            <div>
+              <FoodItemForm editItem={editingItem} onSave={handleSave} />
+            </div>
             
-            {/* Food Items Table */}
-            <FoodItemsTable onEdit={handleEdit} />
+            {/* Right side - Table */}
+            <div>
+              <FoodItemsTable onEdit={handleEdit} />
+            </div>
           </div>
         </main>
       </div>

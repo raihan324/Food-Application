@@ -10,7 +10,6 @@ interface FoodItem {
   id: string;
   name: string;
   description: string;
-  category: string;
   userId: string;
   userName: string;
   userEmail: string;
@@ -92,7 +91,6 @@ const FoodItemsTable: React.FC<FoodItemsTableProps> = ({ onEdit }) => {
           <TableHeader>
             <TableRow className="border-gray-700 hover:bg-gray-800/50">
               <TableHead className="text-gray-300 font-semibold">Item Name</TableHead>
-              <TableHead className="text-gray-300 font-semibold">Category</TableHead>
               <TableHead className="text-gray-300 font-semibold">Description</TableHead>
               <TableHead className="text-gray-300 font-semibold">Added By</TableHead>
               <TableHead className="text-gray-300 font-semibold">Date Added</TableHead>
@@ -102,7 +100,7 @@ const FoodItemsTable: React.FC<FoodItemsTableProps> = ({ onEdit }) => {
           <TableBody>
             {foodItems.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} className="text-center text-gray-400 py-8">
+                <TableCell colSpan={5} className="text-center text-gray-400 py-8">
                   No food items found for today. Add some items to get started!
                 </TableCell>
               </TableRow>
@@ -113,13 +111,8 @@ const FoodItemsTable: React.FC<FoodItemsTableProps> = ({ onEdit }) => {
                   className="border-gray-700 hover:bg-gray-800/30 transition-colors duration-200"
                 >
                   <TableCell className="text-white font-medium">{item.name}</TableCell>
-                  <TableCell className="text-gray-300">
-                    <span className="px-2 py-1 bg-blue-600/20 text-blue-300 rounded-full text-sm">
-                      {item.category}
-                    </span>
-                  </TableCell>
                   <TableCell className="text-gray-300 max-w-xs truncate" title={item.description}>
-                    {item.description}
+                    {item.description || 'No description'}
                   </TableCell>
                   <TableCell className="text-gray-300">
                     <div className="flex flex-col">
