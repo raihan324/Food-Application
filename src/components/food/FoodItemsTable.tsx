@@ -73,17 +73,17 @@ const FoodItemsTable: React.FC<FoodItemsTableProps> = ({ onEdit }) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+      day: 'numeric'
     });
   };
 
   return (
     <div className="bg-gray-900/50 backdrop-blur-lg rounded-xl border border-gray-700 shadow-2xl overflow-hidden">
       <div className="p-6 border-b border-gray-700">
-        <h2 className="text-2xl font-bold text-white">Today's Food Orders</h2>
-        <p className="text-gray-400 mt-1">Total items: {foodItems.length}</p>
+        <div className="flex justify-between items-center">
+          <h2 className="text-2xl font-bold text-white">Today's Food Orders</h2>
+          <p className="text-gray-400">Total items: {foodItems.length}</p>
+        </div>
       </div>
       
       <div className="overflow-x-auto">
@@ -92,7 +92,6 @@ const FoodItemsTable: React.FC<FoodItemsTableProps> = ({ onEdit }) => {
             <TableRow className="border-gray-700 hover:bg-gray-800/50">
               <TableHead className="text-gray-300 font-semibold">Item Name</TableHead>
               <TableHead className="text-gray-300 font-semibold">Description</TableHead>
-              <TableHead className="text-gray-300 font-semibold">Added By</TableHead>
               <TableHead className="text-gray-300 font-semibold">Date Added</TableHead>
               <TableHead className="text-gray-300 font-semibold w-[70px]">Actions</TableHead>
             </TableRow>
@@ -100,7 +99,7 @@ const FoodItemsTable: React.FC<FoodItemsTableProps> = ({ onEdit }) => {
           <TableBody>
             {foodItems.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={5} className="text-center text-gray-400 py-8">
+                <TableCell colSpan={4} className="text-center text-gray-400 py-8">
                   No food items found for today. Add some items to get started!
                 </TableCell>
               </TableRow>
@@ -113,12 +112,6 @@ const FoodItemsTable: React.FC<FoodItemsTableProps> = ({ onEdit }) => {
                   <TableCell className="text-white font-medium">{item.name}</TableCell>
                   <TableCell className="text-gray-300 max-w-xs truncate" title={item.description}>
                     {item.description || 'No description'}
-                  </TableCell>
-                  <TableCell className="text-gray-300">
-                    <div className="flex flex-col">
-                      <span className="font-medium">{item.userName}</span>
-                      <span className="text-sm text-gray-400">{item.userEmail}</span>
-                    </div>
                   </TableCell>
                   <TableCell className="text-gray-400 text-sm">
                     {formatDate(item.createdAt)}

@@ -32,18 +32,18 @@ const Dashboard: React.FC = () => {
       <div className="absolute inset-0 bg-black/20"></div>
       
       <div className="relative z-10">
-        {/* Header */}
+        {/* Header with reduced height */}
         <header className="bg-gray-900/50 backdrop-blur-lg border-b border-gray-700">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center py-6">
+            <div className="flex justify-between items-center py-4">
               <div>
-                <h1 className="text-3xl font-bold text-white">Food Management Dashboard</h1>
+                <h1 className="text-2xl font-bold text-white">Food Management Dashboard</h1>
                 <p className="text-gray-300 mt-1">Welcome back, {user?.name}!</p>
               </div>
               <Button
                 onClick={logout}
                 variant="outline"
-                className="border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white"
+                className="border-gray-600 text-gray-300 hover:bg-red-600 hover:text-white bg-red-500"
               >
                 Sign Out
               </Button>
