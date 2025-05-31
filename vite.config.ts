@@ -12,7 +12,8 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     react({
-      jsxImportSource: "react"
+      jsxImportSource: undefined,
+      jsxRuntime: 'classic'
     }),
     mode === 'development' &&
     componentTagger(),
@@ -24,6 +25,11 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     target: 'esnext',
-    minify: 'esbuild'
+    minify: 'esbuild',
+    rollupOptions: {
+      output: {
+        manualChunks: undefined,
+      },
+    },
   }
 }));
