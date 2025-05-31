@@ -39,6 +39,18 @@ const FoodItemForm: React.FC<FoodItemFormProps> = ({ editItem, onSave }) => {
     }
   }, [editItem]);
 
+  const checkIfUserSubmittedToday = () => {
+    if (!user) return false;
+    
+    const existingItems = JSON.parse(localStorage.getItem('foodItems') || '[]');
+    const today = new Date().toDateString();
+    
+    return existingItems.some((item: FoodItem) => 
+      item.userId === user.id && 
+      new Date(item.createdAt).toDateString() === today
+    );
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -69,6 +81,16 @@ const FoodItemForm: React.FC<FoodItemFormProps> = ({ editItem, onSave }) => {
         description: "Food item updated successfully!",
       });
     } else {
+      // Check if user already submitted today
+      if (checkIfUserSubmittedToday()) {
+        toast({
+          title: "Already Submitted",
+          description: "You have already submitted today. Please edit or delete your previous entry.",
+          variant: "destructive"
+        });
+        return;
+      }
+
       // Create new item
       const newItem: FoodItem = {
         id: Date.now().toString(),

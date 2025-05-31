@@ -69,6 +69,66 @@ const FoodItemsTable: React.FC<FoodItemsTableProps> = ({ onEdit }) => {
     setDeleteItem(null);
   };
 
+  const handlePrint = () => {
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) return;
+
+    const today = new Date().toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+
+    const printContent = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Food Orders - ${today}</title>
+          <style>
+            body { font-family: Arial, sans-serif; margin: 20px; }
+            h1 { color: #333; text-align: center; }
+            table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+            th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+            th { background-color: #f5f5f5; font-weight: bold; }
+            .no-data { text-align: center; color: #666; padding: 40px; }
+          </style>
+        </head>
+        <body>
+          <h1>Food Orders - ${today}</h1>
+          ${foodItems.length === 0 ? 
+            '<div class="no-data">No food orders for today</div>' :
+            `<table>
+              <thead>
+                <tr>
+                  <th>Item Name</th>
+                  <th>Description</th>
+                  <th>User Name</th>
+                  <th>Email</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${foodItems.map(item => `
+                  <tr>
+                    <td>${item.name}</td>
+                    <td>${item.description || 'No description'}</td>
+                    <td>${item.userName}</td>
+                    <td>${item.userEmail}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>`
+          }
+        </body>
+      </html>
+    `;
+
+    printWindow.document.write(printContent);
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+    printWindow.close();
+  };
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -82,7 +142,15 @@ const FoodItemsTable: React.FC<FoodItemsTableProps> = ({ onEdit }) => {
       <div className="p-6 border-b border-gray-700">
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-bold text-white">Today's Food Orders</h2>
-          <p className="text-gray-400">Total items: {foodItems.length}</p>
+          <div className="flex items-center gap-4">
+            <p className="text-gray-400">Total items: {foodItems.length}</p>
+            <Button
+              onClick={handlePrint}
+              className="bg-blue-600 hover:bg-blue-700 text-white"
+            >
+              Print List
+            </Button>
+          </div>
         </div>
       </div>
       
